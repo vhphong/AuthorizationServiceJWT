@@ -1,8 +1,7 @@
-"use strict";
 require("dotenv").config();
 import express from "express";
 import jwt from "jsonwebtoken";
-const verifyToken = require("./middleware/auth");
+import verifyToken from "./middleware/auth";
 const app = express();
 app.use(express.json());
 
@@ -49,9 +48,10 @@ app.get("/users", verifyToken, (req, res) => {
 app.patch("/login", (req, res) => {
     const user = users.find((user) => user.username === req.body.username);
     console.log(user);
-    
+
     if (!user) {
-        return res.sendStatus(401);
+        // return res.sendStatus(401);
+        return res.status(401).send(false);
     }
 
     const tokenDuration = {
@@ -64,5 +64,5 @@ app.patch("/login", (req, res) => {
 });
 
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT_jwtauth || 4000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
